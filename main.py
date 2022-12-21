@@ -39,7 +39,7 @@ def do_connect():
     if not sta_if.isconnected():
         print('connecting to network...')
         sta_if.active(True)
-        sta_if.connect('whiteknight', '')
+        sta_if.connect('SSID', 'password')
         while not sta_if.isconnected():
             pass
     print('network config:', sta_if.ifconfig())
@@ -61,7 +61,7 @@ led = Pin(2, Pin.OUT) # There are two LEDs 2, 16
 
 relay_pin = Pin(15, Pin.OUT) # GPIO15 - D8 pin
 # NOTE Had issues due to messing with Tx,RX pins and serial...
-relay_pin.value(1) # High implies - relay is open/off
+relay_pin.value(0) # High implies - relay is open/off
 led.value(1) # Active low - led will be off
 
 print("Step 1")
@@ -72,7 +72,7 @@ def web_page():
     else:
         gpio_state="OFF"
     html = """<html><head> <title>Wifi Switch</title> <body> <h1>ESP Web Server</h1>  
-    <a href='http://192.168.1.22/?led=off'>Off</a><br/><a href='http://192.168.1.22/?led=on'>On</a><br>
+    <a href='/?led=off'>Off</a><br/><a href='/?led=on'>On</a><br>
     </body></html>"""
     return html
 
@@ -96,7 +96,7 @@ while True:
             print('LED ON')
             led.value(0)
             #myled.value(1)
-            relay_pin.value(0) # active low / relay on
+            relay_pin.value(1) # active low / relay on
             display.fill(0)
             display.text("IP "+ip, 0,0, 1)
             display.text("ON", 10, 10, 1)
@@ -105,7 +105,7 @@ while True:
             print('LED OFF')
             led.value(1)
             #myled.value(0)
-            relay_pin.value(1) # relay off
+            relay_pin.value(0) # relay off
             display.fill(0)
             display.text("IP "+ip, 0,0, 1)
             display.text("OFF", 10, 10, 1)
